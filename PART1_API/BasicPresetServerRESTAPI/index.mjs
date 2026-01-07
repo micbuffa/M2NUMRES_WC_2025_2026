@@ -29,10 +29,7 @@ export const DATA_DIR = process.env.DATA_DIR
 
   console.log("DATA_DIR = " + DATA_DIR)
 
-// We tell express to use the public folder for static files
-app.use(express.static(PUBLIC_DIR));
-
-// use cors middleware to accept cross-domain requests
+  // use cors middleware to accept cross-domain requests
 // cors with default settings allows all origins
 // You can customize it as needed
 // example : app.use(cors({ origin: 'http://example.com' })); or
@@ -40,6 +37,11 @@ app.use(express.static(PUBLIC_DIR));
 // or also with more advanced options like methods, allowed headers, etc.
 // see https://www.npmjs.com/package/cors for more details
 app.use(cors());
+
+// We tell express to use the public folder for static files
+app.use(express.static(PUBLIC_DIR));
+
+
 
 // let's define a route for the preset files
 app.get("/api/presets", async (req, res) => {
