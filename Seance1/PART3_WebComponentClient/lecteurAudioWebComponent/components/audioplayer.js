@@ -1,8 +1,16 @@
-// ici un web component qui encapsule un lecteur audio HTLML5 basique
+
 import "./libs/webaudiocontrols.js";
 
 let style = `
 <style>
+#container {
+        display: inline-block;
+        border: 2px solid #666;
+        border-radius: 10px;
+        padding: 10px;
+        background-color: #e0e0e0;
+    }
+
     audio {
         border: 2px solid #333;
         border-radius: 5px;
@@ -11,7 +19,8 @@ let style = `
     }
 </style>
 `;
-let html = `        
+let html = `  
+<div id="container">     
     <audio id="myplayer" src=""></audio>
     <button id="playbtn">Play</button>
     <button id="pausebtn">Pause</button>
@@ -20,10 +29,19 @@ let html = `
         Volume:
         <input type="range" id="volumeslider" min="0" max="1" step="0.01" value="0.5">
     </label>   
-    <webaudio-knob id="knobVolume" min=0 max=1 step=0.01 value=0.5>
+    <webaudio-knob id="knobVolume" min=0 max=1 step=0.01 value=0.5
+                   
+                   midilearn=true
+                   src="./assets/images/MonBouton.png"
+    >
     </webaudio-knob>
+</div> 
 <script> 
 `;
+const getBaseURL = () => {
+    return new URL('.', import.meta.url);
+};
+
 
 class MyAudioPlayer extends HTMLElement {
     constructor() {
@@ -49,6 +67,18 @@ class MyAudioPlayer extends HTMLElement {
 
         // on définit les listeners pour les boutons et le slider
         this.defineListeners();
+
+        // on résoud les chemins relatifs pour les assets
+        console.log("Base URL for web component assets: ", getBaseURL());
+        this.resolveAssetPaths();
+    }
+
+    resolveAssetPaths() {
+        let images = this.shadowRoot.querySelectorAll('img, webaudio-knob, webaudio-slider, webaudio-switch');
+        images.forEach((e) => {
+            let imagePath = e.getAttribute('src');
+            e.src = getBaseURL() + '/' + imagePath;
+        });
     }
 
     defineListeners() {
@@ -62,7 +92,7 @@ class MyAudioPlayer extends HTMLElement {
 
         pauseButton.addEventListener('click', () => {
             audioElement.pause();
-        }); 
+        });
 
         const volumeKnob = this.shadowRoot.querySelector('#knobVolume');
         volumeKnob.addEventListener('input', (event) => {

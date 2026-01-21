@@ -1,3 +1,7 @@
+window.WebAudioControlsOptions = {
+            useMidi: 1,
+            preserveMidiLearn: 1,
+        };
 /* *
  *
  *  WebAudio-Controls is based on
